@@ -1,0 +1,54 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pytest_cache/
+*.mypy_cache/
+*.coverage
+*.egg-info/
+*.eggs/
+
+# ==========================
+# Virtualenv / Environments
+# ==========================
+.venv/
+env/
+ENV/
+venv/
+*.env
+.env
+# ==========================
+# IDEs / Editors
+# ==========================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# FastAPI / Uvicorn
+# ==========================
+# Temp files created by uvicorn or FastAPI during development
+*.db
+*.sqlite3
+instance/
+__pycache__/
+
+# ==========================
+# Testing / Coverage
+# ==========================
+htmlcov/
+.coverage
+.coverage.*
+nosetests.xml
+pytest_cache/
+*.cover
