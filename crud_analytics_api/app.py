@@ -14,7 +14,7 @@ def read_root():
    """ 
    Show some interesting endpoints 
    Returns:
-        A interactable user interface
+        A interactable user interface - HTMLResponse
    """
 
    sales_routes = [f"<li><a href={r.path}>{r.path}</a> - {r.methods}</li>" for r in sales_router.router.routes if r.methods == {'GET'}]

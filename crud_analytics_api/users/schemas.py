@@ -1,0 +1,23 @@
+from pydantic import BaseModel, EmailStr, Field
+
+
+class UserSchema(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    password: str
+
+
+class UserPublic(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+
+
+class UserList(BaseModel):
+    users: list[UserPublic]
+
+
+class FilterPage(BaseModel):
+    offset: int = Field(0, ge=0)
+    limit: int = Field(0, ge=1)
