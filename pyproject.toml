@@ -42,6 +42,6 @@ pythonpath = '.'
 [tool.taskipy.tasks]
 lint = 'ruff check'
 format = 'ruff check --fix'
-run = 'fastapi dev crud_analytics_api'
+run = 'fastapi dev crud_analytics_api/app.py'
 pre_test = 'task lint'
 test = 'pytest -s -x --cov=crud_analytics_api'

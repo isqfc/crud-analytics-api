@@ -1,0 +1,33 @@
+*Numeric: To do in sourcecode 
+*- Ideas to do
+
+# w reference
+1. Create sales & charts endpoints, sales will return the data, charts will return data in an analytic form, maybe pyplot or chart in front-end
+2. Use modular system to increase simplification of source code
+3. 
+
+- Only one table will be needed on database, data will be organized to be charted. 
+- So sales can be attached to any front-end to gather more data and be charted automatically
+- Users will need authorization to get/edit data, I will use on this project pyjwt and pywdlib for authorization & authentification
+- A good structure to this specific sale data is:
+{
+    id: int,
+    sales: {
+    'GG': [
+          {'flavor': 'mussarela', 'price': 42, 'count': 10}, 
+          {'flavor': 'peperoni', 'price': 52, 'count': 15}],
+    "G": [
+         {'flavor': 'mussarela', 'price':30, 'count': 20}, 
+         {'flavor: 'peperoni', 'price':44, 'count': 35}],
+    },
+    created_at: datetime object from datetime -> function from database .now() -> it will be the same as datetime.now()
+}
+
+where: 
+'GG', 'G' & 'M' refer to pizzas size,
+'flavor' is the flavor, # flavor is not 'relevant' key so it can be added any flavor, if the catalogue changes.
+'price' is the price at the time of creation, 
+'count' is the number of size-flavor sales.
+- So, initially a superuser(admin) must add the data in the database to create charts,
+later the project will fetch to a front-end, where every order will be add automatically in the database.
+as it won't require login to order, I have to work on how this can be added without authorization, possible add only after user paycheck
