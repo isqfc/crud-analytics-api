@@ -6,8 +6,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from crud_analytics_api.app import app
-from crud_analytics_api.core.models import table_registry, User
+from api.app import app
+from api.core.models import table_registry, User
 
 # w key reference 
 

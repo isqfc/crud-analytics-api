@@ -2,11 +2,13 @@ from http import HTTPStatus
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
-from crud_analytics_api.sales import router as sales_router
-from crud_analytics_api.schemas import Message
+from api.schemas import Message
+from api.sales import router as sales_router
+from api.users import router as users_router
 
 app = FastAPI()
 app.include_router(sales_router.router)
+app.include_router(users_router.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK)

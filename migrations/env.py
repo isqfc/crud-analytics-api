@@ -2,8 +2,8 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from crud_analytics_api.core.models import table_registry
-from crud_analytics_api.core.settings import Settings
+from api.core.models import table_registry
+from api.core.settings import Settings
 
 from alembic import context
 

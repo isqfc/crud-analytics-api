@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from schemas import UserPublic, UserSchema, UserList, FilterPage
-from crud_analytics_api.core.models import User
-from crud_analytics_api.core.database import get_session
+from api.core.models import User
+from api.core.database import get_session
 
 
 router = APIRouter(prefix='/users', tags=['users'])
