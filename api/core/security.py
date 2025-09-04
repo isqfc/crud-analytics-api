@@ -1,9 +1,10 @@
 from typing import Annotated
 
-from database import get_session
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+
+from api.core.database import get_session
 
 oauth2_schema = OAuth2PasswordBearer(tokenurl='token')
 

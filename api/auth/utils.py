@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from core.settings import Settings
 from jwt import decode, encode
 from pwdlib import PasswordHash
+
+from api.core.settings import Settings
 
 pass_context = PasswordHash.recommended()
 

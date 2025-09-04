@@ -1,17 +1,19 @@
 from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
-from schemas import FilterPage, UserList, UserPublic, UserSchema
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from api.auth.utils import get_password_hash
 from api.core.database import get_session
 from api.core.models import User
+from api.users.schemas import FilterPage, UserList, UserPublic, UserSchema
 
 # w key reference
 router = APIRouter(prefix='/users', tags=['users'])
 GetSession = Annotated[Session, Depends(get_session)]
+Filter = Annotated[FilterPage, Query()]
 
 
 @router.get('/',
@@ -20,7 +22,7 @@ GetSession = Annotated[Session, Depends(get_session)]
 )
 def read_users(
     session: GetSession,
-    filter_users: FilterPage
+    filter_users: Filter
 ):
     """
     Endpoint to list all users on database
@@ -57,6 +59,11 @@ def create_user(
                 detail='Email already exists'
                 )
 
+    user_db = User(
+        username=user.username,
+        email=user.email,
+        password=get_password_hash(user.password)
+    )
     session.add(user_db)
     session.commit()
     session.refresh(user_db)

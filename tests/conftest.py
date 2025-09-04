@@ -3,15 +3,17 @@ from faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 from api.app import app
+from api.core.database import get_session
 from api.core.models import User, table_registry
 
 # w key reference
 
 
 @pytest.fixture
-def client():
+def client(session):
     """
     Arrange fixture - (AAA)
     Yields:
@@ -20,9 +22,9 @@ def client():
     def dependency_override():
         return session
 
-    with TestClient(app) as app_request:
-        app.dependency_overrides = dependency_override()
-        yield app_request
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = dependency_override
+        yield client
 
     app.dependency_overrides.clear()
 
@@ -34,13 +36,18 @@ def session():
     Yields:
           A SQLAlchemy session request
     """
-    engine = create_engine('sqlite:///memory:')
+    engine = create_engine(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool
+        )
 
+    table_registry.metadata.create_all(engine)
     with Session(engine) as session_request:
-        table_registry.metadata.create_all()
         yield session_request
+        session_request.close()
 
-    table_registry.metadata.drop_all()
+    table_registry.metadata.drop_all(engine)
     engine.dispose()
 
 
@@ -48,9 +55,9 @@ def session():
 def user(session):
 
     model = User(
-        username=fake_user.username,
-        email=fake_user.email,
-        password=fake_user.password
+        username=fake_user['username'],
+        email=fake_user['email'],
+        password=fake_user['password']
     )
 
     session.add(model)
@@ -60,15 +67,15 @@ def user(session):
     return model
 
 
-# Faker uses below
+# Faker user below
 fake = Faker(locale='pt_BR')
 Faker.seed(0)
 
 fake_user = {
     'id': 1,
-    'username': fake.name.unique(),
-    'email': fake.email.unique(),
-    'password': fake.password.unique()
+    'username': fake.unique.name(),
+    'email': fake.unique.email(),
+    'password': fake.unique.password()
 }
 
 
