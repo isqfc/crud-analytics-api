@@ -35,7 +35,7 @@ def read_users(
 
 
 @router.post('/',
-             status_code=HTTPStatus.OK,
+             status_code=HTTPStatus.CREATED,
              response_model=UserPublic
 )
 def create_user(
@@ -53,7 +53,7 @@ def create_user(
                 detail='Username already exists'
                 )
 
-        if user.username == user_db.email:
+        if user.email == user_db.email:
             raise HTTPException(
                 status_code=HTTPStatus.CONFLICT,
                 detail='Email already exists'

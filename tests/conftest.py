@@ -82,7 +82,7 @@ fake_user = {
 @pytest.fixture
 def input_user():
     user = fake_user.copy()
-    user.pop(id)
+    user.pop('id')
     return user
 
 
