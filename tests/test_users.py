@@ -1,8 +1,6 @@
 from http import HTTPStatus
 
 
-
-
 def test_read_all_users(client):
 
     response = client.get('/users')

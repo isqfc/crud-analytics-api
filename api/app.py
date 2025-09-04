@@ -1,16 +1,19 @@
 from http import HTTPStatus
-from fastapi import FastAPI, HTTPException
+
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
-from api.schemas import Message
+from api.auth import router as auth_router
 from api.sales import router as sales_router
 from api.users import router as users_router
 
 app = FastAPI()
 app.include_router(sales_router.router)
 app.include_router(users_router.router)
+app.include_router(auth_router.router)
 
 
+# w key reference
 @app.get('/', status_code=HTTPStatus.OK)
 def read_root():
    """ 

@@ -12,3 +12,6 @@ class Settings(BaseSettings):
         env_file_encoding='utf-8'
     )
     DATABASE_URL: str
+    ALGORITHM: str
+    SECRET_KEY: str
+    ACESS_TOKEN_EXPIRE_TIME: int

@@ -1,15 +1,14 @@
-from faker import Faker
-
 import pytest
+from faker import Faker
 from fastapi.testclient import TestClient
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 from api.app import app
-from api.core.models import table_registry, User
+from api.core.models import User, table_registry
 
-# w key reference 
+# w key reference
+
 
 @pytest.fixture
 def client():
@@ -20,7 +19,7 @@ def client():
     """
     def dependency_override():
         return session
-    
+
     with TestClient(app) as app_request:
         app.dependency_overrides = dependency_override()
         yield app_request
@@ -44,20 +43,22 @@ def session():
     table_registry.metadata.drop_all()
     engine.dispose()
 
+
 @pytest.fixture
 def user(session):
-    
+
     model = User(
-        username= fake_user.username,
-        email= fake_user.email,
-        password= fake_user.password
+        username=fake_user.username,
+        email=fake_user.email,
+        password=fake_user.password
     )
-    
+
     session.add(model)
     session.commit()
     session.refresh(model)
-    
+
     return model
+
 
 # Faker uses below
 fake = Faker(locale='pt_BR')
