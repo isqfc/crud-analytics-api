@@ -16,21 +16,21 @@ app.include_router(auth_router.router)
 # w key reference
 @app.get('/', status_code=HTTPStatus.OK)
 def read_root():
-   """ 
-   Show some interesting endpoints 
-   Returns:
+    """
+    Show some interesting endpoints
+    Returns:
         A interactable user interface - HTMLResponse
-   """
+    """
 
-   sales_routes = [f"<li><a href={r.path}>{r.path}</a> - {r.methods}</li>" for r in sales_router.router.routes if r.methods == {'GET'}]
-   html = f"""
+    sales_routes = [f"<li><a href={r.path}>{r.path}</a> - {r.methods}</li>" for r in sales_router.router.routes if r.methods == {'GET'}]  # noqa
+    html = f"""
     <!DOCTYPE html>
     <html>
     <head>
     <title>API Online</title>
     </head>
     <body>
-    
+
     <h1>Endpoints</h1>
     <p>Interesting Sales Endpoints.</p>
     <ul>
@@ -39,4 +39,4 @@ def read_root():
     </body>
     </html>
     """
-   return HTMLResponse(content=html)
+    return HTMLResponse(content=html)

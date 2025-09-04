@@ -32,7 +32,7 @@ def session():
     """
     Create a session with table_registry metadata in memory for tests
     Yields:
-          A SQLAlchemy session request 
+          A SQLAlchemy session request
     """
     engine = create_engine('sqlite:///memory:')
 

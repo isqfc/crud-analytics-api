@@ -4,7 +4,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """
     APP & Database Settings
-    
     DATABASE_URL: database location
     """
     model_config = SettingsConfigDict(
