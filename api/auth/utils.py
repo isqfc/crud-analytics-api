@@ -22,7 +22,7 @@ def create_access_token(data: dict):
     encoded_jwt = encode(
         to_encode,
         key=Settings().SECRET_KEY,
-        algorithm=[Settings().ALGORITHM]
+        algorithm=Settings().ALGORITHM
     )
 
     return encoded_jwt

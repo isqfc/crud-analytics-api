@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
 from api.app import app
+from api.auth.utils import create_access_token, get_password_hash
 from api.core.database import get_session
 from api.core.models import User, table_registry
 
@@ -52,18 +53,25 @@ def session():
 
 
 @pytest.fixture
+def access_token():
+    return create_access_token
+
+
+# Fixture to inject fake_user on sqlite database in memory
+@pytest.fixture
 def user(session):
 
     model = User(
         username=fake_user['username'],
         email=fake_user['email'],
-        password=fake_user['password']
+        password=get_password_hash(fake_user['password'])
     )
 
     session.add(model)
     session.commit()
     session.refresh(model)
 
+    model.plain_password = fake_user['password']
     return model
 
 

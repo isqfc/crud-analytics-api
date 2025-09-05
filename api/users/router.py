@@ -8,12 +8,14 @@ from sqlalchemy.orm import Session
 from api.auth.utils import get_password_hash
 from api.core.database import get_session
 from api.core.models import User
+from api.core.security import get_current_user
 from api.users.schemas import FilterPage, UserList, UserPublic, UserSchema
 
 # w key reference
 router = APIRouter(prefix='/users', tags=['users'])
 GetSession = Annotated[Session, Depends(get_session)]
 Filter = Annotated[FilterPage, Query()]
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.get('/',
@@ -68,3 +70,13 @@ def create_user(
     session.commit()
     session.refresh(user_db)
     return user_db
+
+
+@router.put('/{user_id}')
+def update_user(
+    user: UserSchema,
+    user_id: int,
+    session: GetSession,
+    current_user: CurrentUser
+):
+    current_user()
