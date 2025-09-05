@@ -34,7 +34,7 @@ extend-exclude = ['migrations']
 line-length = 79
 
 [tool.ruff.lint]
-select = ['E', 'F', 'I', 'W', 'PT', 'PL']
+select = ['E', 'F', 'I', 'W', 'PT', 'PL', 'FAST']
 preview = true
 
 [tool.ruff.format]

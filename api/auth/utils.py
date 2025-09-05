@@ -10,7 +10,7 @@ pass_context = PasswordHash.recommended()
 
 
 # w reference
-def create_acess_token(data: dict):
+def create_access_token(data: dict):
     to_encode = data.copy()
 
     expire = datetime.now(tz=ZoneInfo('UTC')) + timedelta(
