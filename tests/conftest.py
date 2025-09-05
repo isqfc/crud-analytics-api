@@ -57,7 +57,7 @@ def access_token():
     return create_access_token
 
 
-# Fixture to inject fake_user on sqlite database in memory
+# Fixture to inject fake_user on sqlite database in memory and returns user
 @pytest.fixture
 def user(session):
 
