@@ -5,20 +5,21 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jwt import DecodeError
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.auth.utils import decode_jwt
 from api.core.database import get_session
 from api.core.models import User
 
 OAuth2Schema = Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl='/auth/token'))] # noqa
-GetSession = Annotated[Session, Depends(get_session)]
+GetSession = Annotated[AsyncSession, Depends(get_session)]
 
 
-def get_current_user(
+async def get_current_user(
         session: GetSession,
         token: OAuth2Schema
 ) -> User:
+
     credentials_exception = HTTPException(
         status_code=HTTPStatus.FORBIDDEN,
         detail='Could not validate credentials',
@@ -34,7 +35,10 @@ def get_current_user(
     except DecodeError:
         raise credentials_exception
 
-    user_db = session.scalar(select(User).where(User.email == subject_email))
+    # Checking if jwt payload email exists on DB
+    user_db = await session.scalar(select(User).where(
+        User.email == subject_email))
+
     if not user_db:
         raise credentials_exception
 

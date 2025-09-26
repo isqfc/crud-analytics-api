@@ -16,4 +16,3 @@ def test_create_access_token(access_token, input_user):
 
     assert 'exp' in decoded_jwt
     assert decoded_jwt['sub'] == input_user['email']
-

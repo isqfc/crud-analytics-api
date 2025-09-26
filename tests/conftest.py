@@ -1,8 +1,7 @@
-import pytest
+import pytest_asyncio
 from faker import Faker
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import StaticPool
 
 from api.app import app
@@ -13,8 +12,8 @@ from api.core.models import User, table_registry
 # w key reference
 
 
-@pytest.fixture
-def client(session):
+@pytest_asyncio.fixture
+async def client(session):
     """
     Arrange fixture - (AAA)
     Yields:
@@ -30,36 +29,38 @@ def client(session):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
-def session():
+@pytest_asyncio.fixture
+async def session():
     """
     Create a session with table_registry metadata in memory for tests
     Yields:
-          A SQLAlchemy session request
+          A Async SQLAlchemy session request
     """
-    engine = create_engine(
-        'sqlite:///:memory:',
+    engine = create_async_engine(
+        'sqlite+aiosqlite:///:memory:',
         connect_args={'check_same_thread': False},
         poolclass=StaticPool
         )
+    async with engine.begin() as connection:
+        await connection.run_sync(table_registry.metadata.create_all)
 
-    table_registry.metadata.create_all(engine)
-    with Session(engine) as session_request:
+    async with AsyncSession(engine, expire_on_commit=False) as session_request:
         yield session_request
-        session_request.close()
+        await session_request.close()
 
-    table_registry.metadata.drop_all(engine)
-    engine.dispose()
+    async with engine.begin() as connection:
+        await connection.run_sync(table_registry.metadata.drop_all)
+    await engine.dispose()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 def access_token():
     return create_access_token
 
 
 # Fixture to inject fake_user on sqlite database in memory and returns user
-@pytest.fixture
-def user(session):
+@pytest_asyncio.fixture
+async def user(session):
 
     model = User(
         username=fake_user['username'],
@@ -68,8 +69,8 @@ def user(session):
     )
 
     session.add(model)
-    session.commit()
-    session.refresh(model)
+    await session.commit()
+    await session.refresh(model)
 
     model.plain_password = fake_user['password']
     return model
@@ -87,14 +88,14 @@ fake_user = {
 }
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 def input_user():
     user = fake_user.copy()
     user.pop('id')
     return user
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 def output_user():
     user = fake_user.copy()
     user.pop('password')
